@@ -1,4 +1,3 @@
-
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -11,6 +10,8 @@ from django.contrib.auth import get_user_model
 from users.serializers import UserAdminSerializer
 
 User = get_user_model()
+
+
 #########################################################################
 #########################################################################
 class ListCreatePostView(ListCreateAPIView):
@@ -20,6 +21,7 @@ class ListCreatePostView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+
 
 #########################################################################
 #########################################################################
@@ -41,6 +43,7 @@ class RetrieveUpdateDeletePostView(RetrieveUpdateDestroyAPIView):
                     message=getattr(permission, 'message', None),
                     code=getattr(permission, 'code', None)
                 )
+
 
 #########################################################################
 #########################################################################
@@ -80,6 +83,7 @@ class ListLikesView(ListCreateAPIView):
         self.queryset = Post.objects.filter(liked_by=request.user)
         return self.list(request, *args, **kwargs)
 
+
 #########################################################################
 #########################################################################
 class ListPostFollowingView(ListCreateAPIView):
@@ -92,9 +96,10 @@ class ListPostFollowingView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        self.queryset = Post.objects.filter(created_by__in = request.user.following.all())
+        self.queryset = Post.objects.filter(created_by__in=request.user.following.all())
         # created_by__user__to_user_id__from_user_id = request.user
         return self.list(request, *args, **kwargs)
+
 
 #########################################################################
 #########################################################################
@@ -109,12 +114,11 @@ class ListUserPostsView(ListCreateAPIView):
 
     def get(self, request, *args, **kwargs):
         obj_user = self.get_object(User.objects.all(), "user_id")
-        self.queryset = Post.objects.filter(created_by = obj_user)
+        self.queryset = Post.objects.filter(created_by=obj_user)
         # created_by__user__to_user_id__from_user_id = request.user
         return self.list(request, *args, **kwargs)
 
     def get_object(self, queryset, lookup_url_kwarg):
-
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
         obj = get_object_or_404(queryset, **filter_kwargs)
 
@@ -131,13 +135,14 @@ class FollowUserView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserAdminSerializer
     lookup_field = 'id'
     permission_classes = [IsAuthenticated]
+
     def get(self, request, **kwargs):
 
         obj_user = request.user
         following = obj_user.following.all()
 
         self.permission_classes = [IsAuthenticated]
-        obj_following = self.get_object(User.objects.all(),"user_id")
+        obj_following = self.get_object(User.objects.all(), "user_id")
         self.permission_classes = [IsAuthenticated | IsAdminUser]
 
         if obj_following in following:
