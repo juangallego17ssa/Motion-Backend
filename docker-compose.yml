@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    image: egistry.gitlab.propulsion-home.ch/full-stack/batch-23-feb-2023/motion-backend/team3/motion:latest
+    image: motion:latest
     tty: true
     ports:
       - "8001:8000"
