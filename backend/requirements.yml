@@ -1,0 +1,14 @@
+name: conda_motion
+
+dependencies:
+    - python
+    - pip
+    - psycopg2
+    - pip:
+          - django
+          - djangorestframework
+          - djangorestframework-simplejwt
+          - django-cors-headers
+          - drf-yasg
+          - flake8
+          - gunicorn
