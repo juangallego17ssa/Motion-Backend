@@ -59,7 +59,7 @@ export default function ReceivedRequest(props) {
           var config = {
             method: 'patch',
           maxBodyLength: Infinity,
-            url:` https://motion.propulsion-home.ch/backend/api/social/friends/requests/${props.id}/`,
+            url: ((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/requests/${props.id}/`,
             headers: { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
@@ -79,7 +79,7 @@ export default function ReceivedRequest(props) {
           var config = {
             method: 'patch',
           maxBodyLength: Infinity,
-            url:` https://motion.propulsion-home.ch/backend/api/social/friends/requests/${props.id}/`,
+            url: ((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/requests/${props.id}/`,
             headers: { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`

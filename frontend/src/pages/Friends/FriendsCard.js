@@ -125,7 +125,7 @@ export default function FriendsCard({ user, onFetchFollowing, onFetchFriends }) 
       },
       method: 'post',
       maxBodyLength: Infinity,
-      url: `https://motion.propulsion-home.ch/backend/api/social/followers/toggle-follow/${user.id}/`,
+      url: `((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + \`backend/api/social/followers/toggle-follow/${user.id}/`,
 
     };
 
@@ -157,7 +157,7 @@ export default function FriendsCard({ user, onFetchFollowing, onFetchFriends }) 
     var config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: ` https://motion.propulsion-home.ch/backend/api/social/friends/request/${user.id}/`,
+      url: ((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/request/${user.id}/`,
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('token')}`,
         'Content-Type': 'application/json'
