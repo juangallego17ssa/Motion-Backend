@@ -42,7 +42,7 @@ WORKDIR /frontend
 COPY ./frontend/package.json /frontend/
 COPY ./frontend/package-lock.json /frontend/
 RUN npm install
-COPY ./frontend/ /frontend
+COPY ./frontend/ /frontend/
 RUN npm run build
 
 # set the working directory to /backend for whenever you login into your container
