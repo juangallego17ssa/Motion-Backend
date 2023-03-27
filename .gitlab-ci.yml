@@ -20,7 +20,7 @@ build:
   script:
     - docker build --tag="$CI_PIPELINE_ID":"$CI_COMMIT_REF_NAME" --cache-from="$CI_REGISTRY_IMAGE":latest .
 
-lint:
+#lint:
 #  stage: lint
 #  script:
 #    - export CI_PIPELINE_ID=$CI_PIPELINE_ID
