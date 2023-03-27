@@ -44,14 +44,15 @@ INSTALLED_APPS = [
     # other
     'rest_framework',
     'drf_yasg',
+    "corsheaders",
 
 ]
 
 MIDDLEWARE = [
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -153,3 +154,7 @@ SIMPLE_JWT = {
 }
 
 AUTH_USER_MODEL = 'users.User'
+
+CSRF_TRUSTED_ORIGINS = ["https://motion-t3.propulsion-learn.ch", 'http://127.0.0.1']
+
+CORS_ALLOW_ALL_ORIGINS = True
