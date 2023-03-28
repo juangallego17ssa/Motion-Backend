@@ -29,6 +29,7 @@ class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(*args, **kwargs)
 
+
 class GetUpdateOwnUserView(RetrieveUpdateAPIView):
     serializer_class = UserAdminSerializer
 
