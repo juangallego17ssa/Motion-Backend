@@ -5,7 +5,6 @@ from django.contrib.auth.admin import UserAdmin
 User = get_user_model()
 
 
-
 class UserAdmin(UserAdmin):
     readonly_fields = ('date_joined',)
     # fields shown when creating a new instance
@@ -26,5 +25,6 @@ class UserAdmin(UserAdmin):
     # fields which are shown when looking at an list of instances
     list_display = ('email', 'first_name', 'last_name', 'is_staff')
     ordering = ('email',)
+
 
 admin.site.register(User, UserAdmin)

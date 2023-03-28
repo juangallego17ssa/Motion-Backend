@@ -1,0 +1,5 @@
+############## Droplet ##############
+droplet (hostname): droplet.motion.t3
+domain: motion-t3.propulsion-learn.ch
+ip: 164.92.235.103
+

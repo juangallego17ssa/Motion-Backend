@@ -11,10 +11,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 from datetime import timedelta
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -23,10 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-x!o@87w7#5bs_*z4b4zyc7j+_@v_4^4#@*a06&i3ihr!2u&zft"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -46,14 +45,15 @@ INSTALLED_APPS = [
     # other
     'rest_framework',
     'drf_yasg',
+    "corsheaders",
 
 ]
 
 MIDDLEWARE = [
+    "django.middleware.csrf.CsrfViewMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -79,17 +79,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "project.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        "PORT": os.environ.get('POSTGRES_PORT'),
+        "HOST": os.environ.get('POSTGRES_HOST'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
     }
 }
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -109,7 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -121,17 +129,19 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "static-files/"
+STATIC_ROOT = os.path.join(BASE_DIR, "static-files") if DEBUG else "/static-files/"
+
+MEDIA_URL = "media-files/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media-files") if DEBUG else "/media-files/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -144,5 +154,8 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=5)
 }
 
-
 AUTH_USER_MODEL = 'users.User'
+
+CSRF_TRUSTED_ORIGINS = ["https://motion-t3.propulsion-learn.ch", 'http://127.0.0.1']
+
+CORS_ALLOW_ALL_ORIGINS = True
