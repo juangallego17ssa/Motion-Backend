@@ -1,4 +1,4 @@
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from users.models import User
 from users.permissions import IsOwner
@@ -28,3 +28,11 @@ class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
                 serializer_class = UserDefaultSerializer
         kwargs.setdefault('context', self.get_serializer_context())
         return serializer_class(*args, **kwargs)
+
+
+class GetUpdateOwnUserView(RetrieveUpdateAPIView):
+    serializer_class = UserAdminSerializer
+
+    def get_object(self):
+
+        return self.request.user
