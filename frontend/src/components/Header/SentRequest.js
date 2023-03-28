@@ -60,7 +60,7 @@ export default function SentRequest(props) {
             }
         }
         try{
-            await axios.delete(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/requests/${props.id}/`,config)
+            await axios.delete(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "https://motion-t3.propulsion-learn.ch/") + `backend/api/social/friends/requests/${props.id}/`,config)
         }
         catch(error){console.log(error)}
     }

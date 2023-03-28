@@ -56,7 +56,7 @@ const userData = useSelector(state => state.user.userData);
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 },
             };
-            const response = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/users/?limit=50`, config);
+            const response = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "https://motion-t3.propulsion-learn.ch/") + `backend/api/users/?limit=50`, config);
             const results = (response.data.results)
             setUsers(results.filter((user)=>user.first_name !== ''))
             setIsLoading(false)
@@ -77,7 +77,7 @@ useEffect(()=>{
       },
     };
     try {
-      const res = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/requests/`, config);
+      const res = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "https://motion-t3.propulsion-learn.ch/") + `backend/api/social/friends/requests/`, config);
       // console.log(res.data)
   
     } catch (error) {

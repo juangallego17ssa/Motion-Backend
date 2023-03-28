@@ -12,7 +12,7 @@ const myHeader = {
 
 
 const configAPI = {
-    baseURL: ((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + "backend/api/",
+    baseURL: ((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "https://motion-t3.propulsion-learn.ch/") + "backend/api/",
     headers: myHeader
 }
 
