@@ -1,5 +1,4 @@
 from django.contrib.auth.hashers import make_password
-from django.shortcuts import render
 from rest_framework import serializers, status
 from rest_framework.generics import CreateAPIView, GenericAPIView
 from rest_framework.response import Response
@@ -43,5 +42,3 @@ class CreateUserView(GenericAPIView):
         serializer.save()
 
         return Response(serializer.data)
-
-

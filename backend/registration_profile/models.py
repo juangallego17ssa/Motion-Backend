@@ -5,8 +5,6 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-
 User = get_user_model()
 
 
@@ -24,6 +22,7 @@ class RegistrationProfile(models.Model):
 
     def __str__(self):
         return f'{self.id} - Reg profile for {self.user.username}'
+
 
 # related name: key to access the instance from the related object
 # first_user = User.objects.first()
