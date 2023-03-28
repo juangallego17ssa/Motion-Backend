@@ -5,5 +5,5 @@ from .models import RegistrationProfile
 class RegProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationProfile
-        fields = "__all__"
+        fields = "user", "email"
         read_only_fields = ['user']
