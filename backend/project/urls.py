@@ -20,7 +20,8 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework_simplejwt import views as jwt_views
 
-from registration_profile.views import UpdateRegProfileCodeView
+from registration_profile.views import UpdateRegProfileCodeView, UpdatePasswordView
+
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -43,6 +44,7 @@ urlpatterns = [
     path('backend/api/token/verify/', jwt_views.TokenVerifyView.as_view(), name='token_refresh'),
 
     path('backend/api/auth/password-reset/', UpdateRegProfileCodeView.as_view()),
+    path('backend/api/auth/password-reset/validation/', UpdatePasswordView.as_view()),
 
     path('backend/api/social/', include("posts.urls")),
     path('backend/api/users/', include("users.urls")),
