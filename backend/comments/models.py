@@ -11,5 +11,6 @@ class Comment(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="created_comments")
     posts = models.ManyToManyField(to=Post, related_name="comments")
+
     def __str__(self):
         return f'Comment {self.id} - {self.created_by}'

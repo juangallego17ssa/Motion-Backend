@@ -5,6 +5,7 @@ from posts.serializers import PostSerializer
 
 User = get_user_model()
 
+
 class CommentSerializer(serializers.ModelSerializer):
     created_by = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     posts = PostSerializer(many=True)
