@@ -53,11 +53,11 @@ class UpdateRegProfileCodeView(GenericAPIView):
     def post(self, request, *args, **kwargs):
         try:
             instance = RegistrationProfile.objects.get(email=request.data['email'])
-            instance.code = code_generator()
+            instance.password_reset = code_generator()
             instance.save()
             send_mail(
                 'Registration key',
-                f'Your registration key is {instance.code}.',
+                f'With this key u can reset ur password {instance.password_reset}.',
                 'from@example.com',
                 [request.data['email']],
                 fail_silently=False,
@@ -69,6 +69,26 @@ class UpdateRegProfileCodeView(GenericAPIView):
         except RegistrationProfile.DoesNotExist:
             return Response({'If we find your E-Mail in our database, an email with a password reset key will be send'},
                             status=status.HTTP_200_OK)
+
+
+class UpdatePasswordView(GenericAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        try:
+            instance = RegistrationProfile.objects.get(email=request.data['email'])
+            if request.data['password_reset'] != instance.password_reset:
+                return Response({'error': 'Invalid code'}, status=status.HTTP_400_BAD_REQUEST)
+        except RegistrationProfile.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+        data = request.data.copy()
+        user = instance.user
+
+        user.set_password(data['password'])
+
+        return Response({'Password Changed'}, status=status.HTTP_200_OK)
 
 
 class CreateUserView(GenericAPIView):

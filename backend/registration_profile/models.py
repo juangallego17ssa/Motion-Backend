@@ -15,6 +15,7 @@ def code_generator(length=5):
 
 class RegistrationProfile(models.Model):
     code = models.CharField(max_length=5, default=code_generator)
+    password_reset = models.CharField(max_length=5, blank=True)
     email = models.EmailField(unique=True)
     user = models.OneToOneField(to=User, on_delete=models.CASCADE, related_name='reg_profile', null=True)
     created = models.DateTimeField(auto_now_add=True)
