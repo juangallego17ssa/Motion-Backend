@@ -46,6 +46,7 @@ urlpatterns = [
 
     path('backend/api/social/', include("posts.urls")),
     path('backend/api/users/', include("users.urls")),
+    path('backend/api/auth/registration/', include("registration_profile.urls")),
 
     path('backend/api/docs/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 

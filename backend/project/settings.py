@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # my apps
     "users",
     "posts",
+    "registration_profile",
 
     # other
     'rest_framework',
