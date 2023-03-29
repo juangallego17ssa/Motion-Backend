@@ -10,6 +10,7 @@ class UserAdminSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['follower'] = UserSimpleSerializer(instance.follower, many=True).data
+        representation['friend'] = UserSimpleSerializer(instance.friend, many=True).data
         return representation
 
 

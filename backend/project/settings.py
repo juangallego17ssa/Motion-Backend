@@ -98,7 +98,7 @@ DATABASES = {
         "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
     }
 }
-#
+
 # DATABASES = {
 #     "default": {
 #         "ENGINE": "django.db.backends.sqlite3",
@@ -152,8 +152,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-
+    )
 }
 
 SIMPLE_JWT = {
@@ -173,3 +172,10 @@ EMAIL_HOST = os.environ.get('EMAIL_HOST')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = os.environ.get('EMAIL_PORT')
+
+# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', True)
+# EMAIL_HOST = os.environ.get('EMAIL_HOST', "smtp.gmail.com")
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', "motionconnectinfo@gmail.com")
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "lrpjyygjnyeaaten")
+# EMAIL_PORT = os.environ.get('EMAIL_PORT', "587")
