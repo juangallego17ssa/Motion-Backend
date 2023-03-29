@@ -1,10 +1,9 @@
 from rest_framework import serializers, filters
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView, \
-    GenericAPIView, ListAPIView
+
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, DjangoModelPermissions
-from rest_framework.response import Response
+
 
 from users.models import User
 from users.permissions import IsOwner
@@ -38,7 +37,6 @@ class ListCreateUserView(ListAPIView):
     #     return queryset
 
 
-
 class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
 
     queryset = User.objects.all()
@@ -62,7 +60,3 @@ class GetUpdateOwnUserView(RetrieveUpdateAPIView):
     def get_object(self):
 
         return self.request.user
-
-
-
-
