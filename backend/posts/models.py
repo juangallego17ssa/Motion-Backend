@@ -8,6 +8,7 @@ User = get_user_model()
 
 class Post(models.Model):
     content = models.TextField(null=False, blank=False)
+    image = models.ImageField(upload_to='post_images', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="created_posts")

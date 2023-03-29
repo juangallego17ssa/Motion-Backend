@@ -32,11 +32,11 @@ class RegistrationProfile(models.Model):
 
 @receiver(post_save, sender=User)
 def callback_function(sender, instance, **kwargs):
-    regprofile = RegistrationProfile.objects.get(email=instance.email)
-    if regprofile:
-        regprofile.user = instance
-        regprofile.save()
-    else:
-        profile, created = RegistrationProfile.objects.get_or_create(user=instance, email=instance.email)
-        if created:
+    if kwargs['created']:
+        regprofile = RegistrationProfile.objects.filter(email=instance.email).first()
+        if regprofile:
+            regprofile.user = instance
+            regprofile.save()
+        else:
+            profile = RegistrationProfile.objects.create(user=instance, email=instance.email)
             profile.save()
