@@ -46,6 +46,7 @@ urlpatterns = [
     path('backend/api/auth/password-reset/', UpdateRegProfileCodeView.as_view()),
     path('backend/api/auth/password-reset/validation/', UpdatePasswordView.as_view()),
 
+
     path('backend/api/social/', include("posts.urls")),
     path('backend/api/users/', include("users.urls")),
     path('backend/api/auth/registration/', include("registration_profile.urls")),
