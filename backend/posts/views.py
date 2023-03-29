@@ -1,5 +1,5 @@
 from rest_framework import filters
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404, ListAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
@@ -193,3 +193,15 @@ class ListFollowingView(ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         self.queryset = User.objects.filter(follower=request.user)
         return self.list(request, *args, **kwargs)
+
+class ListFriendsPostView(ListAPIView):
+
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        friends = user.friend.all()
+
+        return Post.objects.filter(created_by__in=friends)
+
+
