@@ -2,7 +2,7 @@ from rest_framework import serializers, filters
 
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
 
-from rest_framework.permissions import IsAuthenticated, IsAdminUser, AllowAny, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 from users.models import User
