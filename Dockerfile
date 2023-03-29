@@ -3,10 +3,10 @@ FROM continuumio/miniconda3:latest
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 # Installs node
-#RUN apt-get update
-#RUN apt-get upgrade -y
-#RUN apt-get install curl -y
-#RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install curl -y
+RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs
 
 # Creates the directories that will have our image! You can change them if you want, but be consequent and change them everywhere!
 RUN mkdir -p /backend
@@ -39,12 +39,12 @@ RUN echo "source activate conda_motion" >~/.bashrc
 COPY ./backend /backend
 
 # install the frontend dependencies and copy the frontend files
-#WORKDIR /frontend
-#COPY ./frontend/package.json /frontend/
-#COPY ./frontend/package-lock.json /frontend/
-#RUN npm install
-#COPY ./frontend/ /frontend/
-#RUN npm run build
+WORKDIR /frontend
+COPY ./frontend/package.json /frontend/
+COPY ./frontend/package-lock.json /frontend/
+RUN npm install
+COPY ./frontend/ /frontend/
+RUN npm run build
 
 # set the working directory to /backend for whenever you login into your container
 WORKDIR /backend

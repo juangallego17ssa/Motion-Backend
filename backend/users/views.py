@@ -1,6 +1,10 @@
 from django.db.models import Q
 from rest_framework import generics
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView
+from rest_framework import serializers, filters
+
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
+
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from users.models import User
@@ -11,9 +15,30 @@ from django.shortcuts import get_object_or_404
 
 # Create your views here.
 class ListCreateUserView(ListCreateAPIView):
+class UserMeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ["id", "password", "groups", "user_permissions", "is_superuser", "is_staff", "is_active"]
+        read_only_fields = ['email']
+
+
+class DjangoFilterBackend:
+    pass
+
+
+class ListCreateUserView(ListAPIView):
+
     queryset = User.objects.all()
     serializer_class = UserAdminSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated]
+
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['username', 'email']
+
+    # def get_queryset(self):
+    #     query = self.request.GET.get('search', '')  # search is the params and '' the default value
+    #     queryset = User.objects.filter(username__contains=query).order_by('-created')
+    #     return queryset
 
 
 class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
@@ -33,7 +58,7 @@ class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
 
 
 class GetUpdateOwnUserView(RetrieveUpdateAPIView):
-    serializer_class = UserAdminSerializer
+    serializer_class = UserMeSerializer
 
     def get_object(self):
         return self.request.user

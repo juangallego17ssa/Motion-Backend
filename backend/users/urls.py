@@ -6,7 +6,7 @@ from users.views import ListCreateUserView, RetrieveUpdateDeleteUserView, GetUpd
 urlpatterns = [
     path('', ListCreateUserView.as_view()),
     path('me/', GetUpdateOwnUserView.as_view()),
-    path('<str:username>/', RetrieveUpdateDeleteUserView.as_view()),
+    path("<str:username>/", RetrieveUpdateDeleteUserView.as_view()),
 
     path('social/followers/toggle-follow/<int:user_id>/', ToggleFollowView.as_view()),
     path('social/followers/followers/', FollowersView.as_view()),
