@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('registration_profile', '0001_initial'),
+        ('posts', '0001_initial'),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='registrationprofile',
-            name='password_reset',
-            field=models.CharField(blank=True, max_length=5),
+            model_name='post',
+            name='image',
+            field=models.ImageField(blank=True, null=True, upload_to='post_images'),
         ),
     ]

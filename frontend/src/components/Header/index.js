@@ -181,7 +181,7 @@ useEffect(()=>{
         },
       };
       try {
-        const res = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "http://motion.propulsion-home.ch/") + `backend/api/social/friends/requests/`, config);
+        const res = await axios.get(((process.env.NODE_ENV==="development") ? "http://localhost:8001/" : "https://motion-t3.propulsion-learn.ch/") + `backend/api/social/friends/requests/`, config);
         setRequests(res.data)
         dispatch(updateRequestData(res.data))
       } catch (error) {

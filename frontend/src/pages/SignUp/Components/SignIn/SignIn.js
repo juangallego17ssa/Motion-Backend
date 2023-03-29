@@ -65,7 +65,7 @@ const SignIn = () => {
         const myBody = JSON.stringify({
             // email: "rijipak673@v2ssr.com",
             // password: "password",
-            username: email,
+            email: email,
             password: password,
         });
         
@@ -76,8 +76,8 @@ const SignIn = () => {
                 
         // Fetch the data and save the token in the local storage
         try {
-            await console.log(motionAPI("token/",myConfig))
-            const response = (await motionAPI("token/", myConfig)).data;
+            await console.log(motionAPI("token/", myConfig))
+            const response = (await motionAPI(myConfig)).data;
             console.log(response)
             const token = response.access;
             const user = response.user
