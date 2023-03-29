@@ -37,7 +37,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path("backend/admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
 
     path('backend/api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('backend/api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),

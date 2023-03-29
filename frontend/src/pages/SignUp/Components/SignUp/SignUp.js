@@ -21,7 +21,6 @@ const SignUp = () => {
   const setEmailHome = useOutletContext()[1];
 
 
-
   //// controlled form
   // email input
   const [email, setEmail] = useState("");
@@ -53,8 +52,9 @@ const SignUp = () => {
     // Fetch the data and save the token in the local storage
     try {
       setError("");
-      const response = await motionAPI("auth/registration/", myConfig);
-      if (response.status === 200) {
+      const response = await motionAPI("backend/api/auth/registration/", myConfig);
+      console.log(response)
+      if (response.status === 201) {
         setEmailHome(email)
         navigate("/home/success/")
       }
@@ -104,5 +104,6 @@ const SignUp = () => {
     </DivStyled>
   );
 };
+
 
 export default SignUp;
