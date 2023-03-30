@@ -43,12 +43,15 @@ INSTALLED_APPS = [
     "posts",
     "comments",
     "registration_profile",
+    "friend_requests",
 
     # other
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
-    "corsheaders",
+    "corsheaders"
+
+
 
 ]
 

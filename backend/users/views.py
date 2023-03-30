@@ -1,16 +1,17 @@
-from rest_framework import serializers, filters
-# from rest_framework import status
+from rest_framework import serializers, filters, status
 
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView, CreateAPIView, \
+    RetrieveAPIView
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-# from rest_framework.response import Response
-# from rest_framework_simplejwt.exceptions import TokenError, InvalidToken
-# from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.response import Response
 
+from friend_requests.models import FriendRequest
+from friend_requests.serializers import FriendRequestSerializer
 from users.models import User
 from users.permissions import IsOwner
-from users.serializers import UserAdminSerializer, UserDefaultSerializer
+from users.serializers import UserAdminSerializer, UserDefaultSerializer, UserSimpleSerializer
+from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
@@ -64,46 +65,135 @@ class GetUpdateOwnUserView(RetrieveUpdateAPIView):
 
         return self.request.user
 
-# class GetUserAndTokenView(TokenObtainPairView):
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#
-#         try:
-#             serializer.is_valid(raise_exception=True)
-#         except TokenError as e:
-#             raise InvalidToken(e.args[0])
-#
-#         responseToken = serializer.validated_data
-#
-#
-#         response_data = {
-#             'refresh': responseToken['refresh'],
-#             'access': responseToken['access'],
-#             'user': {
-#                 "id":serializer.user.id,
-#                 "email":serializer.user.email,
-#                 "first_name": serializer.user.first_name,
-#                 "last_name": serializer.user.last_name,
-#                 "username":serializer.user.username,
-#                 # "job": serializer.user.job,
-#                 # "avatar": serializer.user.avatar,
-#                 # "banner": serializer.user.banner,
-#                 "location": serializer.user.location,
-#                 "phone": serializer.user.phone,
-#                 "about_me": serializer.user.about_me,
-#                 "tags": serializer.user.tags,
-#                 # "logged_in_user_is_following": serializer.user.logged_in_user_is_following,
-#                 # "logged_in_user_is_friends": serializer.user.logged_in_user_is_friends,
-#                 # "logged_in_user_is_rejected": serializer.user.logged_in_user_is_rejected,
-#                 # "logged_in_user_received_fr": serializer.user.logged_in_user_received_fr,
-#                 # "logged_in_user_sent_fr": serializer.user.logged_in_user_sent_fr,
-#                 # "amount_of_posts": serializer.user.amount_of_posts,
-#                 # "amount_of_likes": serializer.user.amount_of_likes,
-#                 # "amount_of_friends": serializer.user.amount_of_friends,
-#                 # "amount_of_followers": serializer.user.amount_of_followers,
-#                 # "amount_following": serializer.user.amount_following
-#             }
-#         }
-#
-#         return Response(response_data, status=status.HTTP_200_OK)
+
+class ToggleFollowView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, user_id):
+        user_to_follow = get_object_or_404(User, id=user_id)
+        if request.user in user_to_follow.followers.all():
+            user_to_follow.followers.remove(request.user)
+            return Response({'detail': 'User unfollowed successfully.'})
+        else:
+            user_to_follow.followers.add(request.user)
+            return Response({'detail': 'User followed successfully.'})
+
+
+class FollowersView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        followers = request.user.followers.all()
+        serializer = UserSimpleSerializer(followers, many=True)
+        return Response(serializer.data)
+
+
+class FollowingView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        following = request.user.follower.all()
+        serializer = UserSimpleSerializer(following, many=True)
+        return Response(serializer.data)
+
+
+class FriendRequestView(CreateAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, user_id):
+        friend = get_object_or_404(User, id=user_id)
+        sender = request.user
+        if sender == friend:
+            return Response(
+                {"detail": "You cannot send friend request to yourself."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        if FriendRequest.objects.filter(sender=sender, receiver=friend).exists():
+            return Response(
+                {"detail": "You have already sent a friend request to this user."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        if friend in sender.friend.all():
+            return Response(
+                {"detail": "You are already friends with this user."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        friend_request = FriendRequest.objects.create(sender=sender, receiver=friend)
+        serializer = FriendRequestSerializer(friend_request)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
+
+
+class FriendRequestDetailView(RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, friend_request_id):
+        friend_request = get_object_or_404(
+            request.user.received_friend_requests.all(), id=friend_request_id
+        )
+        serializer = FriendRequestSerializer(friend_request)
+        return Response(serializer.data)
+
+    def patch(self, request, friend_request_id):
+        friend_request = get_object_or_404(request.user.received_friend_requests.all(), id=friend_request_id)
+
+        status = request.data.get("status")
+        if status is None:
+            return Response(
+                {"status": ["This field is required."]},
+            )
+        if status == "accepted":
+            request.user.friend.add(friend_request.sender)
+            friend_request.status = "accepted"
+            friend_request.save()
+            return Response(
+                {"detail": "Friend request accepted."},
+            )
+        elif status == "rejected":
+            friend_request.delete()
+            return Response(
+                {"detail": "Friend request rejected."},
+            )
+        return Response(
+            {"status": ["Invalid value for status field."]},
+        )
+
+    def delete(self, request, friend_request_id):
+        friend_request = get_object_or_404(
+            request.user.receiver_friend_requests, id=friend_request_id
+        )
+        friend_request.delete()
+        return Response(
+            {"detail": "Friend request deleted."},
+        )
+
+class FriendsView(ListAPIView):
+        permission_classes = (IsAuthenticated,)
+
+        def get(self, request):
+            friends = request.user.friend.all()
+            serializer = UserSimpleSerializer(friends, many=True)
+            return Response(serializer.data)
+
+class SearchUsersView(ListAPIView):
+        serializer_class = UserSimpleSerializer
+        permission_classes = (IsAuthenticated,)
+
+        def get_queryset(self):
+            queryset = User.objects.all()
+            search_string = self.request.query_params.get('search', None)
+            if search_string:
+                queryset = queryset.filter(
+                    Q(username__icontains=search_string) |
+                    Q(first_name__icontains=search_string) |
+                    Q(last_name__icontains=search_string) |
+                    Q(email__icontains=search_string)
+                )
+            return queryset
+
+class UserDetailView(RetrieveAPIView):
+        serializer_class = UserAdminSerializer
+        permission_classes = (IsAuthenticated,)
+
+        def get_object(self):
+            return get_object_or_404(User, id=self.kwargs['user_id'])
+
