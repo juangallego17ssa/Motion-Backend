@@ -1,6 +1,7 @@
-from rest_framework import serializers, filters
+from rest_framework import serializers, filters, status
 
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
+from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView, CreateAPIView, \
+    RetrieveAPIView
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
@@ -65,7 +66,7 @@ class GetUpdateOwnUserView(RetrieveUpdateAPIView):
         return self.request.user
 
 
-class ToggleFollowView(generics.CreateAPIView):
+class ToggleFollowView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, user_id):
@@ -78,7 +79,7 @@ class ToggleFollowView(generics.CreateAPIView):
             return Response({'detail': 'User followed successfully.'})
 
 
-class FollowersView(generics.ListAPIView):
+class FollowersView(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
@@ -87,7 +88,7 @@ class FollowersView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class FollowingView(generics.ListAPIView):
+class FollowingView(ListAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
@@ -96,7 +97,7 @@ class FollowingView(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class FriendRequestView(generics.CreateAPIView):
+class FriendRequestView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, user_id):
@@ -122,7 +123,7 @@ class FriendRequestView(generics.CreateAPIView):
         )
 
 
-class FriendRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
+class FriendRequestDetailView(RetrieveUpdateDestroyAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request, friend_request_id):
@@ -165,7 +166,7 @@ class FriendRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
             {"detail": "Friend request deleted."},
         )
 
-class FriendsView(generics.ListAPIView):
+class FriendsView(ListAPIView):
         permission_classes = (IsAuthenticated,)
 
         def get(self, request):
@@ -173,7 +174,7 @@ class FriendsView(generics.ListAPIView):
             serializer = UserSimpleSerializer(friends, many=True)
             return Response(serializer.data)
 
-class SearchUsersView(generics.ListAPIView):
+class SearchUsersView(ListAPIView):
         serializer_class = UserSimpleSerializer
         permission_classes = (IsAuthenticated,)
 
@@ -189,7 +190,7 @@ class SearchUsersView(generics.ListAPIView):
                 )
             return queryset
 
-class UserDetailView(generics.RetrieveAPIView):
+class UserDetailView(RetrieveAPIView):
         serializer_class = UserAdminSerializer
         permission_classes = (IsAuthenticated,)
 
