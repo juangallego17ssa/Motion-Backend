@@ -32,7 +32,7 @@ const Main = styled.div`
 //--------Profile Page---------
 const Profile = () => {
     const userData = useSelector(state => state.user.userData);
-    console.log(userData)
+
     return (
         userData
             ?

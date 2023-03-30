@@ -42,8 +42,9 @@ function App() {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
         };
-
+        console.log("getting user")
         const response = await motionAPI.get("backend/api/users/me", config);
+        console.log(response)
         dispatch(updateUserData(response.data));
       } catch (error) {
         console.log(error);

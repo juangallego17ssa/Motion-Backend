@@ -17,7 +17,7 @@ urlpatterns = [
     path('posts/', ListCreatePostView.as_view()),
     path("posts/<int:id>/", RetrieveUpdateDeletePostView.as_view()),
     path("posts/<int:id>/toogle_like/", LikePostView.as_view()),
-    path("posts/me", ListOwnPostsView.as_view()),
+    path("posts/me/", ListOwnPostsView.as_view()),
     path("posts/likes/", ListLikesView.as_view()),
     path("posts/following/", ListPostFollowingView.as_view()),
     path("posts/user/<int:user_id>/", ListUserPostsView.as_view()),  # not done

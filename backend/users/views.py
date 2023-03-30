@@ -166,34 +166,35 @@ class FriendRequestDetailView(RetrieveUpdateDestroyAPIView):
             {"detail": "Friend request deleted."},
         )
 
-class FriendsView(ListAPIView):
-        permission_classes = (IsAuthenticated,)
 
-        def get(self, request):
-            friends = request.user.friend.all()
-            serializer = UserSimpleSerializer(friends, many=True)
-            return Response(serializer.data)
+class FriendsView(ListAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request):
+        friends = request.user.friend.all()
+        serializer = UserSimpleSerializer(friends, many=True)
+        return Response(serializer.data)
 
 class SearchUsersView(ListAPIView):
-        serializer_class = UserSimpleSerializer
-        permission_classes = (IsAuthenticated,)
+    serializer_class = UserSimpleSerializer
+    permission_classes = (IsAuthenticated,)
 
-        def get_queryset(self):
-            queryset = User.objects.all()
-            search_string = self.request.query_params.get('search', None)
-            if search_string:
-                queryset = queryset.filter(
-                    Q(username__icontains=search_string) |
-                    Q(first_name__icontains=search_string) |
-                    Q(last_name__icontains=search_string) |
-                    Q(email__icontains=search_string)
-                )
-            return queryset
+    def get_queryset(self):
+        queryset = User.objects.all()
+        search_string = self.request.query_params.get('search', None)
+        if search_string:
+            queryset = queryset.filter(
+                Q(username__icontains=search_string) |
+                Q(first_name__icontains=search_string) |
+                Q(last_name__icontains=search_string) |
+                Q(email__icontains=search_string)
+            )
+        return queryset
+
 
 class UserDetailView(RetrieveAPIView):
-        serializer_class = UserAdminSerializer
-        permission_classes = (IsAuthenticated,)
+    serializer_class = UserAdminSerializer
+    permission_classes = (IsAuthenticated,)
 
-        def get_object(self):
-            return get_object_or_404(User, id=self.kwargs['user_id'])
-
+    def get_object(self):
+        return get_object_or_404(User, id=self.kwargs['user_id'])

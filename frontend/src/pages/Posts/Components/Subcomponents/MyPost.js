@@ -182,7 +182,7 @@ const NotLikeIcon = styled(FcLikePlaceholder)`
 
 const MyPost = (props) => {
 
-
+    console.log("hello my boy")
     console.log(props.post)
     const [ShowProfile, setShowPofile] = useState(false)
     const firstName = props.post.created_by.first_name
