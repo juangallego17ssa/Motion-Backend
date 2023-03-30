@@ -4,6 +4,7 @@ from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIV
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
+from emails.models import send_new_post_email
 from posts.permissions import IsOwner
 from posts.models import Post
 from posts.serializers import PostSerializer
@@ -25,6 +26,7 @@ class ListCreatePostView(ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+        send_new_post_email(self.request.user, serializer.validated_data['post'])
 
 
 #########################################################################

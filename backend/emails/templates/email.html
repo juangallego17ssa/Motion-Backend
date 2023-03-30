@@ -1,0 +1,19 @@
+<!-- emails/follow_email.html -->
+<p>Hi {{ followed.first_name }},</p>
+<p>{{ follower.first_name }} {{ follower.last_name }} has started following you on Social Media!</p>
+<p>Thanks,<br/>The Social Media Team</p>
+
+<!-- emails/friend_request_email.html -->
+<p>Hi {{ recipient.first_name }},</p>
+<p>{{ sender.first_name }} {{ sender.last_name }} has sent you a friend request on Social Media.</p>
+<p>Thanks,<br/>The Social Media Team</p>
+
+<!-- emails/friend_accept_email.html -->
+<p>Hi {{ recipient.first_name }},</p>
+<p>{{ sender.first_name }} {{ sender.last_name }} has accepted your friend request on Social Media.</p>
+<p>Thanks,<br/>The Social Media Team</p>
+
+<!-- emails/new_post_email.html -->
+<p>Hi {{ friend.first_name }},</p>
+<p>Your friend {{ sender.first_name }} {{ sender.last_name }} has made a new post on Social Media:</p>
+<p>{{ post.content }}</p>
