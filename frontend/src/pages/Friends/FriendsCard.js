@@ -232,7 +232,7 @@ export default function FriendsCard({ user, onFetchFollowing, onFetchFriends }) 
         <p>{user.about_me}</p>
       </FlexDiv>
       <HobbiesBox>
-        {user.things_user_likes.map((thing, index) => <Tag key={index}>{thing}</Tag>)}
+        {/*{user.tags.map((thing, index) => <Tag key={index}>{thing}</Tag>)}*/}
       </HobbiesBox>
     </StyledFriendCard>
   );

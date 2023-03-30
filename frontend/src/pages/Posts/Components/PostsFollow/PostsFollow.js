@@ -25,10 +25,11 @@ const PostsFollow = () => {
 
     // send axios request
     try {
-      const response1 = await motionAPI("social/posts/me/", myConfig);
-      const response2 = await motionAPI("social/posts/following/", myConfig);
-      setMyPostArray(response1.data.results);
-      setPostArray(response2.data.results);
+      console.log(myConfig)
+      const response1 = await motionAPI("backend/api/social/posts/user/5/", myConfig);
+      // // const response2 = await motionAPI("backend/api/social/posts/following/", myConfig);
+      setMyPostArray(response1.data);
+      // // setPostArray(response2.data.results);
 
 
     } catch (exception) {
@@ -38,7 +39,7 @@ const PostsFollow = () => {
 
   return (
     <PostsContainer className="mainPostContainer">
-        <Posts myPostArray={myPostArray} postArray={postArray} filter={"follow"} />
+        <Posts myPostArray={myPostArray} filter={"follow"} />
     </PostsContainer>
   );
 };

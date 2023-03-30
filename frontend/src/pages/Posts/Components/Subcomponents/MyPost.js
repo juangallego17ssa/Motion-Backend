@@ -181,18 +181,21 @@ const NotLikeIcon = styled(FcLikePlaceholder)`
 
 
 const MyPost = (props) => {
+
+
+    console.log(props.post)
     const [ShowProfile, setShowPofile] = useState(false)
-    const firstName = props.post.user.first_name
-    const lastName = props.post.user.last_name
-    const avatar = props.post.user.avatar
+    const firstName = props.post.created_by.first_name
+    const lastName = props.post.created_by.last_name
+    // const avatar = props.post.created_by.avatar
     const created = new Date(props.post.created)
-    const image1 = props.post.images[0] ? props.post.images[0].image : ""
-    const image2 = props.post.images[1] ? props.post.images[1].image : ""
-    const image3 = props.post.images[2] ? props.post.images[2].image : ""
-    const image4 = props.post.images[3] ? props.post.images[3].image : ""
-    const [userLiked, setUserLiked] = useState(props.post.logged_in_user_liked)
+    // const image1 = props.post.images[0] ? props.post.images[0].image : ""
+    // const image2 = props.post.images[1] ? props.post.images[1].image : ""
+    // const image3 = props.post.images[2] ? props.post.images[2].image : ""
+    // const image4 = props.post.images[3] ? props.post.images[3].image : ""
+    // const [userLiked, setUserLiked] = useState(props.post.logged_in_user_liked)
     const postId = props.post.id
-    const [likes, setLikes] = useState(props.post.amount_of_likes)
+    const [likes, setLikes] = useState(props.post.like_count)
     const now = new Date()
     const minutesAgo = Math.abs(now - created) / 1000 / 60
     const hoursAgo = minutesAgo / 60
@@ -229,7 +232,7 @@ const MyPost = (props) => {
 
         // Fetch the data and save the token in the local storage
         try {
-            const response = (await motionAPI(`/social/posts/${props.post.id}`, myConfig)).data;
+            const response = (await motionAPI(`/backend/api/social/posts/${props.id}`, myConfig)).data;
             navigate("/")
         } catch (exception) {
             console.log(exception)
@@ -250,9 +253,9 @@ const MyPost = (props) => {
         };
 
         try {
-            const response = (await motionAPI(`/social/posts/toggle-like/${postId}/`, myConfig)).data;
-            if (userLiked) { setLikes(likes - 1) } else { setLikes(likes + 1) }
-            setUserLiked(!userLiked)
+            // const response = (await motionAPI(`/social/posts/toggle-like/${postId}/`, myConfig)).data;
+            // if (userLiked) { setLikes(likes - 1) } else { setLikes(likes + 1) }
+            // setUserLiked(!userLiked)
         } catch (exception) {
             console.log(exception)
         }
@@ -278,8 +281,8 @@ const MyPost = (props) => {
             <div className="post1 post">
                 <div className="headerPost">
                     <div className="headerLeft">
-                        <UserAvatar userData={props.post.user} isSmallAvatar />
-                        {/* <div className="avatarDiv"><img src={avatar} alt="user-avatar" /></div> */}
+                        <UserAvatar userData={props.user} isSmallAvatar />
+                         {/*<div className="avatarDiv"><img src={avatar} alt="user-avatar" /></div>*/}
                         <div className="nameAndDate">
                             <span className="userFullName">{firstName + " " + lastName}</span>
                             <span className="datePost">{timeAgo}</span>
@@ -294,24 +297,24 @@ const MyPost = (props) => {
                 <div className="textPost">
                     {content}
                 </div>
-                {image1 ? <div className="imagePost">
-                    <img src={image1} onClick={(e) => onPictureClick(image1)} />
-                    <img src={image2} onClick={(e) => onPictureClick(image2)} />
-                    <img src={image3} onClick={(e) => onPictureClick(image3)} />
-                    <img src={image4} onClick={(e) => onPictureClick(image4)} />
-                </div>
-                    : ""
-                }
+                {/*{image1 ? <div className="imagePost">*/}
+                {/*    <img src={image1} onClick={(e) => onPictureClick(image1)} />*/}
+                {/*    <img src={image2} onClick={(e) => onPictureClick(image2)} />*/}
+                {/*    <img src={image3} onClick={(e) => onPictureClick(image3)} />*/}
+                {/*    <img src={image4} onClick={(e) => onPictureClick(image4)} />*/}
+                {/*</div>*/}
+                {/*    : ""*/}
+                {/*}*/}
                 <div className="picturesPost"></div>
                 <div className="repost post"></div>
                 <div className="footerPost">
                     <div className="like">
-                        {!props.isMine ?
-                            <>
-                                {userLiked ? <LikeIcon onClick={handleLike} /> : <NotLikeIcon onClick={handleLike} />}
-                                <span>Like</span>
-                            </>
-                            : ""}
+                        {/*{!props.isMine ?*/}
+                        {/*    <>*/}
+                        {/*        {userLiked ? <LikeIcon onClick={handleLike} /> : <NotLikeIcon onClick={handleLike} />}*/}
+                        {/*        <span>Like</span>*/}
+                        {/*    </>*/}
+                        {/*    : ""}*/}
                     </div>
                     <div className="amountLikes">{likes + ((likes === 1) ? " like" : "  likes")}</div>
                 </div>

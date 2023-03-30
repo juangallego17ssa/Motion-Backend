@@ -18,7 +18,7 @@ const UserEdit = () => {
   const userData = useSelector(state => state.user.userData);
 
   const [thingUserLikes, setThingUserLikes] = useState('');
-  const [thingsUserLikesList, setThingsUserLikesList] = useState(userData && userData.things_user_likes ? userData.things_user_likes : []);
+  const [thingsUserLikesList, setThingsUserLikesList] = useState(userData && userData.tags ? userData.tags : []);
   const [isOpenAvatarPopover, setIsOpenAvatarPopover] = useState(false);
 
   const handleThingsChange = e => {
@@ -74,7 +74,7 @@ const UserEdit = () => {
     const formEntries = Object.fromEntries(formData.entries());
     const userData = {
       ...formEntries,
-      things_user_likes: thingsUserLikesList,
+      // tags: thingsUserLikesList,
     }
 
     await updateUserDataFromEdit(userData);
@@ -92,7 +92,9 @@ const UserEdit = () => {
       },
     };
     try {
-      const res = await motionAPI.patch('users/me/', data, config);
+      const res = await motionAPI.patch('backend/api/users/me/', data, config);
+      console.log(res)
+
       dispatch(updateUserData(res.data));
     } catch (error) {
       console.log(error);
@@ -206,8 +208,8 @@ const UserEdit = () => {
                     <Input type="text" name="location" id="location" defaultValue={userData.location} />
                   </FormField>
                   <FormField>
-                    <Label htmlFor="phone_number">Phone</Label>
-                    <Input type="text" name="phone_number" id="phone_number" defaultValue={userData.phone_number} />
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input type="text" name="phone" id="phone" defaultValue={userData.phone} />
                   </FormField>
                   <FormField>
                     <Label htmlFor="about_me">About me</Label>
@@ -219,7 +221,7 @@ const UserEdit = () => {
                   </FormField>
                 </InputGrid>
                 <ThingsUserLikesContainer>
-                  <Label htmlFor="things-I-like">Things I like</Label>
+                  <Label htmlFor="tags">Things I like</Label>
                   <ThingsUserLikes>
                     {thingsUserLikesList.length !== 0
                       ?

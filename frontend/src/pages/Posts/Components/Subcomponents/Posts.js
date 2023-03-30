@@ -9,7 +9,10 @@ const Posts = (props)=>{
 
 
     const myPostArray = props.myPostArray
-    const postArray = props.postArray
+    // const postArray = props.postArray
+
+
+
 
     const [showPicture, setShowPicture] = useState(false)
     const [showedPictureURL, setShowedPictureURL] = useState("")
@@ -33,7 +36,7 @@ const Posts = (props)=>{
             height: 450px;
         }
     `
-
+    console.log(myPostArray.length)
 
     return (
         <div className="posts">
@@ -44,9 +47,9 @@ const Posts = (props)=>{
             <CreatePost className="postNew post" filter={props.filter} />
                 {myPostArray.length ? myPostArray.map((post) => <MyPost key={uuid()} post={post} isMine={true} setShowPicture={setShowPicture} setShowedPictureURL={setShowedPictureURL}/>) : ""}
             </div>
-            <div className="right">
-                {postArray.length ? postArray.map((post) => <MyPost key={uuid()} post={post} isMine={false} setShowPicture={setShowPicture} setShowedPictureURL={setShowedPictureURL}/>) : ""}
-            </div>
+            {/*<div className="right">*/}
+            {/*    {postArray.length ? postArray.map((post) => <MyPost key={uuid()} post={post} isMine={false} setShowPicture={setShowPicture} setShowedPictureURL={setShowedPictureURL}/>) : ""}*/}
+            {/*</div>*/}
         </div>
     )
 }

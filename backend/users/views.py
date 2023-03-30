@@ -1,6 +1,3 @@
-from django.db.models import Q
-from rest_framework import generics, status
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework import serializers, filters
 
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdateAPIView, ListAPIView
@@ -17,7 +14,6 @@ from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
-
 class UserMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -45,6 +41,7 @@ class ListCreateUserView(ListAPIView):
 
 
 class RetrieveUpdateDeleteUserView(RetrieveUpdateDestroyAPIView):
+
     queryset = User.objects.all()
     # serializer_class = UserAdminSerializer
     lookup_field = 'username'
@@ -64,6 +61,7 @@ class GetUpdateOwnUserView(RetrieveUpdateAPIView):
     serializer_class = UserMeSerializer
 
     def get_object(self):
+
         return self.request.user
 
 
