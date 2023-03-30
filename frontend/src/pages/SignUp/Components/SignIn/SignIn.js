@@ -80,6 +80,7 @@ const SignIn = () => {
             const response = (await motionAPI(myConfig)).data;
             console.log(response)
             const token = response.access;
+            console.log(response)
             const user = response.user
             localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
