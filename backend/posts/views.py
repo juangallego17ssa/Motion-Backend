@@ -154,7 +154,6 @@ class ToggleFollowView(GenericAPIView):
             instance.followers.remove(social)
         instance.save()
 
-
         return Response({
             'message': 'Follow status updated successfully',
 
@@ -239,7 +238,6 @@ class ListOwnPostsView(ListAPIView):
 
 
         return Post.objects.filter(created_by=user)
-
 
 
 

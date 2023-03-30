@@ -178,6 +178,7 @@ class SearchUsersView(ListAPIView):
         serializer_class = UserSimpleSerializer
         permission_classes = (IsAuthenticated,)
 
+
         def get_queryset(self):
             queryset = User.objects.all()
             search_string = self.request.query_params.get('search', None)
@@ -190,10 +191,10 @@ class SearchUsersView(ListAPIView):
                 )
             return queryset
 
+
 class UserDetailView(RetrieveAPIView):
         serializer_class = UserAdminSerializer
         permission_classes = (IsAuthenticated,)
 
         def get_object(self):
             return get_object_or_404(User, id=self.kwargs['user_id'])
-

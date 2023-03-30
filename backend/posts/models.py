@@ -19,7 +19,7 @@ class Post(models.Model):
     created_by = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="created_posts")
     liked_by = models.ManyToManyField(to=User, related_name="liked_posts", blank=True)
     like_count = models.PositiveIntegerField(default=0)
-    #comments = models.ManyToManyField(to=Comment, related_name='posts')
+    # comments = models.ManyToManyField(to=Comment, related_name='posts')
 
     def __str__(self):
         return f'Post {self.id} - {self.created_by}'
