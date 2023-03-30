@@ -1,5 +1,5 @@
 from django.db.models import Q
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, ListCreateAPIView, RetrieveUpdateAPIView
 from rest_framework import serializers, filters
 
@@ -7,6 +7,9 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, RetrieveUpdate
 
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+
+from friend_requests.models import FriendRequest
+from friend_requests.serializers import FriendRequestSerializer
 from users.models import User
 from users.permissions import IsOwner
 from users.serializers import UserAdminSerializer, UserDefaultSerializer, UserSimpleSerializer
@@ -14,7 +17,7 @@ from django.shortcuts import get_object_or_404
 
 
 # Create your views here.
-class ListCreateUserView(ListCreateAPIView):
+
 class UserMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -103,63 +106,68 @@ class FriendRequestView(generics.CreateAPIView):
         sender = request.user
         if sender == friend:
             return Response(
-                {"detail": "You cannot send friend request to yourself."},
+                {"detail": "You cannot send friend request to yourself."}, status=status.HTTP_400_BAD_REQUEST
             )
-        if friend in sender.sent_friend_requests.all():
+        if FriendRequest.objects.filter(sender=sender, receiver=friend).exists():
             return Response(
-                {"detail": "You have already sent a friend request to this user."},
+                {"detail": "You have already sent a friend request to this user."}, status=status.HTTP_400_BAD_REQUEST
             )
-            if friend in sender.friend.all():
-                return Response(
-                    {"detail": "You are already friends with this user."},
-                )
-            sender.sent_friend_requests.add(friend)
-            friend.receive_friend_requests.add(sender)
+        if friend in sender.friend.all():
             return Response(
-                {"detail": "Friend request sent successfully."},
+                {"detail": "You are already friends with this user."}, status=status.HTTP_400_BAD_REQUEST
             )
+        friend_request = FriendRequest.objects.create(sender=sender, receiver=friend)
+        serializer = FriendRequestSerializer(friend_request)
+        return Response(
+            serializer.data,
+            status=status.HTTP_201_CREATED
+        )
 
-    class FriendRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
-        permission_classes = (IsAuthenticated,)
 
-        def get(self, request, friend_request_id):
-            friend_request = get_object_or_404(
-                request.user.receive_friend_requests, id=friend_request_id
+class FriendRequestDetailView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def get(self, request, friend_request_id):
+        friend_request = get_object_or_404(
+            request.user.received_friend_requests.all(), id=friend_request_id
+        )
+        serializer = FriendRequestSerializer(friend_request)
+        return Response(serializer.data)
+
+    def patch(self, request, friend_request_id):
+        friend_request = get_object_or_404(request.user.received_friend_requests.all(), id=friend_request_id)
+
+        status = request.data.get("status")
+        if status is None:
+            return Response(
+                {"status": ["This field is required."]},
             )
-            serializer = UserSimpleSerializer(friend_request.sender)
-            return Response(serializer.data)
-
-        def patch(self, request, friend_request_id):
-            friend_request = get_object_or_404(
-                request.user.receive_friend_requests, id=friend_request_id
+        if status == "accepted":
+            request.user.friend.add(friend_request.sender)
+            friend_request.status = "accepted"
+            friend_request.save()
+            return Response(
+                {"detail": "Friend request accepted."},
             )
-            accepted = request.data.get("accepted")
-            if accepted is None:
-                return Response(
-                    {"accepted": ["This field is required."]},
-                )
-            if accepted:
-                friend_request.sender.friend.add(request.user)
-                request.user.friend.add(friend_request.sender)
-                friend_request.delete()
-                return Response(
-                    {"detail": "Friend request accepted."},
-                )
+        elif status == "rejected":
             friend_request.delete()
             return Response(
                 {"detail": "Friend request rejected."},
             )
+        return Response(
+            {"status": ["Invalid value for status field."]},
+        )
 
-        def delete(self, request, friend_request_id):
-            friend_request = get_object_or_404(
-                request.user.receive_friend_requests, id=friend_request_id
-            )
-            friend_request.delete()
-            return Response(
-                {"detail": "Friend request deleted."},
-            )
+    def delete(self, request, friend_request_id):
+        friend_request = get_object_or_404(
+            request.user.receiver_friend_requests, id=friend_request_id
+        )
+        friend_request.delete()
+        return Response(
+            {"detail": "Friend request deleted."},
+        )
 
-    class FriendsView(generics.ListAPIView):
+class FriendsView(generics.ListAPIView):
         permission_classes = (IsAuthenticated,)
 
         def get(self, request):
@@ -167,7 +175,7 @@ class FriendRequestView(generics.CreateAPIView):
             serializer = UserSimpleSerializer(friends, many=True)
             return Response(serializer.data)
 
-    class SearchUsersView(generics.ListAPIView):
+class SearchUsersView(generics.ListAPIView):
         serializer_class = UserSimpleSerializer
         permission_classes = (IsAuthenticated,)
 
@@ -183,7 +191,7 @@ class FriendRequestView(generics.CreateAPIView):
                 )
             return queryset
 
-    class UserDetailView(generics.RetrieveAPIView):
+class UserDetailView(generics.RetrieveAPIView):
         serializer_class = UserAdminSerializer
         permission_classes = (IsAuthenticated,)
 

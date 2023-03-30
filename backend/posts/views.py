@@ -1,5 +1,6 @@
 from rest_framework import filters
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, get_object_or_404, ListAPIView, \
+    GenericAPIView
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
@@ -99,7 +100,7 @@ class ListPostFollowingView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        self.queryset = Post.objects.filter(created_by__in=request.user.following.all())
+        self.queryset = Post.objects.filter(created_by__in=request.user.follower.all())
         # created_by__user__to_user_id__from_user_id = request.user
         return self.list(request, *args, **kwargs)
 
@@ -133,6 +134,24 @@ class ListUserPostsView(ListCreateAPIView):
 
 #########################################################################
 #########################################################################
+class ToggleFollowView(GenericAPIView):
+    queryset = User.objects.all()
+    lookup_field = 'id'
+    serializer_class = UserAdminSerializer
+
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        social = request.user
+
+        if social not in instance.followers.all():
+            instance.followers.add(social)
+        else:
+            instance.followers.remove(social)
+        serializer = UserAdminSerializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 class FollowUserView(RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserAdminSerializer
@@ -142,16 +161,16 @@ class FollowUserView(RetrieveUpdateDestroyAPIView):
     def get(self, request, **kwargs):
 
         obj_user = request.user
-        following = obj_user.following.all()
+        followers = obj_user.followers.all()
 
         self.permission_classes = [IsAuthenticated]
-        obj_following = self.get_object(User.objects.all(), "user_id")
+        obj_followers = self.get_object(queryset=User.objects.all(), lookup_url_kwarg="user_id")
         self.permission_classes = [IsAuthenticated | IsAdminUser]
 
-        if obj_following in following:
-            obj_user.following.remove(obj_following)
+        if obj_followers in followers:
+            obj_user.followers.remove(obj_followers)
         else:
-            obj_user.following.add(obj_following)
+            obj_user.followers.add(obj_followers)
 
         return self.retrieve(request, User.objects.all(), "user_id", **kwargs)
 
@@ -179,7 +198,7 @@ class ListFollowersView(ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        self.queryset = User.objects.filter(following=request.user)
+        self.queryset = User.objects.filter(followers=request.user)
         return self.list(request, *args, **kwargs)
 
 

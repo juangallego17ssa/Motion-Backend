@@ -3,6 +3,7 @@ from users.models import User
 
 
 class UserAdminSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = '__all__'
@@ -17,10 +18,10 @@ class UserAdminSerializer(serializers.ModelSerializer):
 class UserDefaultSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'date_joined']
+        fields = ['id', 'first_name', 'last_name', 'date_joined']
 
 
 class UserSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ['id', 'username', 'email']

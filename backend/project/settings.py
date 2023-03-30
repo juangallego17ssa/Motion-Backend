@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "posts",
     "comments",
     "registration_profile",
+    "friend_requests",
 
     # other
     'rest_framework',

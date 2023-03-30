@@ -14,11 +14,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=100, blank=True)
     about_me = models.CharField(max_length=250, blank=True)
     tags = models.CharField(max_length=100, blank=True)
-    friend = models.ManyToManyField(to="self", blank=True, related_name="friends", symmetrical=True)
-    sent_friend_request = models.ManyToManyField(to="self", blank=True, related_name="sent_friend_requests",
-                                                 symmetrical=False)
-    receive_friend_request = models.ManyToManyField(to="self", blank=True, related_name="receive_friend_requests",
-                                                    symmetrical=False)
+    friend = models.ManyToManyField(to="self", blank=True)
     follower = models.ManyToManyField(to="self", related_name="followers", symmetrical=False)
 
     def __str__(self):
