@@ -22,7 +22,7 @@ class ListCreatePostView(ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['content', 'title']
+    search_fields = ['content']
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -229,6 +229,16 @@ class ListFriendsPostView(ListAPIView):
         friends = user.friend.all()
 
         return Post.objects.filter(created_by__in=friends)
+
+class ListOwnPostsView(ListAPIView):
+
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+
+        return Post.objects.filter(created_by=user)
 
 
 
