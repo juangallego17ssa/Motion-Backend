@@ -34,15 +34,15 @@ const User = ({ userData }) => {
               </UserContact>
               <UserContact>
                 <Text>Phone</Text>
-                <Text>{userData.phone_number}</Text>
+                <Text>{userData.phone}</Text>
               </UserContact>
             </UserContactDetails>
           </UserInfoLeft>
           <UserInfoRight>
             <Text>Things I like</Text>
             <TagContainer>
-              {userData.things_user_likes
-                ? userData.things_user_likes.map((thing, idx) => {
+              {userData.tags
+                ? userData.tags.map((thing, idx) => {
                   return <Tag key={idx}>{thing}</Tag>
                 })
                 : null

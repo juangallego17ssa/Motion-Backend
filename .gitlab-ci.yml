@@ -54,4 +54,5 @@ deploy:
   script:
     - docker compose -f docker-compose.deploy.yml pull
     - docker compose -f docker-compose.deploy.yml down --remove-orphans
+    - if docker volume ls -q -f name=build | grep -q .; then docker volume rm build fi
     - docker compose -f docker-compose.deploy.yml up -d

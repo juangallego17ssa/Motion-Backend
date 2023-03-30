@@ -12,6 +12,7 @@ import UserAvatar from '../../../../components/UserAvatar'
 
 const CreatePost = (props) => {
 
+    const myUser = useSelector(state => state.user.userData)
     //////// Visual components
 
     //// Shows the create post view
@@ -72,7 +73,7 @@ const CreatePost = (props) => {
 
         // declare formData
         const formData = new FormData();
-        formData.append("user", user)
+        formData.append("created_by", myUser)
         formData.append("content", content)
         for (let myPostImage of myPostImages) {
             formData.append("images", myPostImage.file)
@@ -90,7 +91,8 @@ const CreatePost = (props) => {
 
         // Fetch the data and save the token in the local storage
         try {
-            const response = (await motionAPI("/social/posts/", myConfig)).data;
+            console.log(myConfig)
+            const response = (await motionAPI("backend/api/social/posts/", myConfig)).data;
             setDraftPost("")
             setMyPostImages([])
             setShowCreatePost(false)

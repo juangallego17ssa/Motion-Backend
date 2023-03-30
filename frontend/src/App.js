@@ -43,7 +43,7 @@ function App() {
           },
         };
 
-        const response = await motionAPI.get("users/me", config);
+        const response = await motionAPI.get("backend/api/users/me", config);
         dispatch(updateUserData(response.data));
       } catch (error) {
         console.log(error);
