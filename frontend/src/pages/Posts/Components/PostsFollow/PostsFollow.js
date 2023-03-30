@@ -26,6 +26,8 @@ const PostsFollow = () => {
     // send axios request
     try {
       const response1 = await motionAPI("backend/api/social/posts/me/", myConfig);
+      console.log("response1")
+      console.log(response1)
       const response2 = await motionAPI("backend/api/social/posts/", myConfig);
       setMyPostArray(response1.data);
       setPostArray(response2.data);
@@ -35,6 +37,8 @@ const PostsFollow = () => {
       console.log(exception);
     }
   };
+
+  console.log(myPostArray)
 
   return (
     <PostsContainer className="mainPostContainer">

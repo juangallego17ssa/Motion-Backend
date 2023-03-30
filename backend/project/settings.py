@@ -89,23 +89,23 @@ WSGI_APPLICATION = "project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': os.environ.get('POSTGRES_DB'),
-#         "PORT": os.environ.get('POSTGRES_PORT'),
-#         "HOST": os.environ.get('POSTGRES_HOST'),
-#         "USER": os.environ.get('POSTGRES_USER'),
-#         "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('POSTGRES_DB'),
+        "PORT": os.environ.get('POSTGRES_PORT'),
+        "HOST": os.environ.get('POSTGRES_HOST'),
+        "USER": os.environ.get('POSTGRES_USER'),
+        "PASSWORD": os.environ.get('POSTGRES_PASSWORD'),
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -167,16 +167,16 @@ CSRF_TRUSTED_ORIGINS = ["https://motion-t3.propulsion-learn.ch", 'http://127.0.0
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
-# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
-# EMAIL_HOST = os.environ.get('EMAIL_HOST')
-# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
-# EMAIL_PORT = os.environ.get('EMAIL_PORT')
-
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
-EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', True)
-EMAIL_HOST = os.environ.get('EMAIL_HOST', "smtp.gmail.com")
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', "motionconnectinfo@gmail.com")
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "lrpjyygjnyeaaten")
-EMAIL_PORT = os.environ.get('EMAIL_PORT', "587")
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT')
+
+# DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL')
+# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', True)
+# EMAIL_HOST = os.environ.get('EMAIL_HOST', "smtp.gmail.com")
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', "motionconnectinfo@gmail.com")
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', "lrpjyygjnyeaaten")
+# EMAIL_PORT = os.environ.get('EMAIL_PORT', "587")
